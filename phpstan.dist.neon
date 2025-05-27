@@ -1,0 +1,14 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+
+parameters:
+    level: 8
+    inferPrivatePropertyTypeFromConstructor: true
+    symfony:
+        containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml
+    paths:
+        - src/
+        - tests/
+    ignoreErrors:
+       - identifier: missingType.iterableValue
+       - identifier: missingType.generics

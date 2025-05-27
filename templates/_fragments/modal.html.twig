@@ -1,0 +1,14 @@
+<div data-controller="modal">
+    <button data-action="click->modal#show" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ms-3 rounded">
+        {% block btnHeader %}{% endblock %}
+    </button>
+    <div data-modal-target="modal" class="fixed inset-0 bg-gray-500/75 transition-opacity flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg max-w-md w-full relative">
+            <button type="button" data-action="click->modal#hide" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900">
+                ✕
+            </button>
+            <h2 class="mb-3">{% block header %}{% endblock %}</h2>
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>

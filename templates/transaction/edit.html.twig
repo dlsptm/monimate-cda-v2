@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Transaction{% endblock %}
+
+{% block body %}
+
+    {{ include('transaction/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('transaction_index', { 'slug': transaction.account.slug}) }}">back to list</a>
+
+    {{ include('transaction/_delete_form.html.twig') }}
+{% endblock %}

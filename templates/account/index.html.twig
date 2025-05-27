@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountController!{% endblock %}
+
+{% block body %}
+    <h1>{{ accountUser.account.title }}</h1>
+
+    <div>
+        <a href="{{ path('transaction_new', {slug: accountUser.account.slug}) }}">Ajouter une transaction</a>
+    </div>
+
+    <h2 class="text-4xl ms-3">Transactions</h2>
+    {% set total = transactions|reduce((carry, t) => carry + t.amount, 0) %}
+    <h3 class="text-2xl">Total: {{ total }}€</h3>
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    {% if accountUser.account.transactions|length > 0 %}
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-blue-300 dark:text-blue-500">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Date d'achat
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Titre
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Montant
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Catégorie
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Location
+            </th>
+            <th scope="col" class="px-6 py-3">
+                <span class="sr-only">Action</span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in accountUser.account.transactions %}
+            <td class="px-6 py-4">
+                {{ transaction.getCreatedAt() ? transaction.getCreatedAt().format('d-m-Y') : '' }}
+            </td>
+        <td class="px-6 py-4">
+            {{ transaction.title }}
+        </td>
+        <td class="px-6 py-4">
+            {{ transaction.amount }}€
+        </td>
+            <td class="px-6 py-4">
+                {{ transaction.category.title }}
+            </td>
+            <td class="px-6 py-4">
+                {{ transaction.location }}€
+            </td>
+            <td class="px-6 py-4">
+                <a href="{{ path('transaction_edit', {id : transaction.id, slug: transaction.account.slug}) }}"><i class="pi pi-pencil"></i></a>
+                <a href="{{ path('transaction_delete', {id : transaction.id, slug: transaction.account.slug}) }}"><i class="pi pi-trash"></i></a>
+            </td>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Vous n'avez pas encore de transaction.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
