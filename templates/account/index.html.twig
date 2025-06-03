@@ -1,71 +1,206 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}{{ accountUser.account.title }}{% endblock %}
 
 {% block body %}
-    <h1>{{ accountUser.account.title }}</h1>
+    <h1 class="text-center text-5xl mb-3">{{ accountUser.account.title }}</h1>
 
     <div>
-        <a href="{{ path('transaction_new', {slug: accountUser.account.slug}) }}">Ajouter une transaction</a>
+        <a href="{{ path('transaction_new', {slug: accountUser.account.slug}) }}"
+           class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300"
+        >
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-transparent">
+            Ajouter une transaction
+            </span>
+        </a>
     </div>
 
-    <h2 class="text-4xl ms-3">Transactions</h2>
-    {% set total = transactions|reduce((carry, t) => carry + t.amount, 0) %}
-    <h3 class="text-2xl">Total: {{ total }}€</h3>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-3">
+        <h2 class="text-gray-700 uppercase bg-gray-50 text-center font-bold">Transactions</h2>
+        {% if accountUser.account.transactions|length > 0 %}
+            {% set total = transactions|reduce((carry, t) => carry + t.amount, 0) %}
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Date d'achat
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Titre
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Montant
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Catégorie
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Location
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Action</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transaction in accountUser.account.transactions %}
+                    <tr class="hover:bg-pink-100">
+                        <td class="px-6 py-4">
+                            {{ transaction.getCreatedAt() ? transaction.getCreatedAt().format('d-m-Y') : '' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ transaction.title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ transaction.amount }}€
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ transaction.category.title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ transaction.location }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <i class="fa fa-home"></i>
+                            <i class="fa fa-user"></i>
 
+                            <a href="{{ path('transaction_edit', {id : transaction.id, slug: transaction.account.slug}) }}">Modifier</a>
+                            <a href="{{ path('transaction_delete', {id : transaction.id, slug: transaction.account.slug}) }}">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot class="text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-right font-bold">
+                        Total: {{ total }}€
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore de transaction.</p>
+        {% endif %}
+    </div>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    {% if accountUser.account.transactions|length > 0 %}
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-blue-300 dark:text-blue-500">
-        <tr>
-            <th scope="col" class="px-6 py-3">
-                Date d'achat
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Titre
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Montant
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Catégorie
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Location
-            </th>
-            <th scope="col" class="px-6 py-3">
-                <span class="sr-only">Action</span>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for transaction in accountUser.account.transactions %}
-            <td class="px-6 py-4">
-                {{ transaction.getCreatedAt() ? transaction.getCreatedAt().format('d-m-Y') : '' }}
-            </td>
-        <td class="px-6 py-4">
-            {{ transaction.title }}
-        </td>
-        <td class="px-6 py-4">
-            {{ transaction.amount }}€
-        </td>
-            <td class="px-6 py-4">
-                {{ transaction.category.title }}
-            </td>
-            <td class="px-6 py-4">
-                {{ transaction.location }}€
-            </td>
-            <td class="px-6 py-4">
-                <a href="{{ path('transaction_edit', {id : transaction.id, slug: transaction.account.slug}) }}"><i class="pi pi-pencil"></i></a>
-                <a href="{{ path('transaction_delete', {id : transaction.id, slug: transaction.account.slug}) }}"><i class="pi pi-trash"></i></a>
-            </td>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>Vous n'avez pas encore de transaction.</p>
-    {% endif %}
-</div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-3">
+        <h2 class="text-gray-700 uppercase bg-gray-50 text-center font-bold">Revenues</h2>
+        {% if incomes|length > 0 %}
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Montant
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Titre
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Date de création
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Action</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for income in incomes %}
+                    <tr class="hover:bg-pink-100">
+                        <td class="px-6 py-4">
+                            {{ income.amount }}€
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ income.title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ income.getCreatedAt() ? income.getCreatedAt().format('d-m-Y') : '' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="{{ path('app_income_edit', {id : income.id}) }}">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore de revenues.</p>
+        {% endif %}
+    </div>
 
+    <section class="mb-3 flex gap-3">
+        <div class="max-w-md divide-y divide-gray-200 flex-1">
+            <h2 class="text-gray-700 uppercase bg-gray-50 text-center font-bold">Dépenses par catégorie</h2>
+        {% if totalByCategory|length > 0 %}
+            <ul>
+                {% for total in totalByCategory %}
+                    <li class="hover:bg-pink-100">
+                        <a href="{{ path('transaction_category', {'slug': accountUser.account.slug, 'category': total.category|lower  }) }}"
+                           class="block p-3">
+                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                <div class="shrink-0">
+                                    <img class="w-8 h-8 rounded-full" src="{{ asset('/img/' ~ total.category|lower ~'.png') }}" alt="{{ total.category }}" width="40" height="40">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        {{ total.category | capitalize }}
+                                    </p>
+                                </div>
+                                <div class="inline-flex items-center text-base font-semibold text-gray-900">
+                                    {{ total.total }}€
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Vous n'avez pas de dépenses</p>
+        {% endif %}
+        </div>
+        <div class="max-w-md divide-y divide-gray-200 flex-1">
+            <h2 class="text-gray-700 uppercase bg-gray-50 text-center font-bold">Economies</h2>
+        {% if savings|length > 0 %}
+            <ul>
+                {% for saving in savings %}
+                    <li class="hover:bg-pink-100 p-4">
+                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                            <p class="flex-1 min-w-0 font-semibold text-gray-900 truncate">
+                                    {{ saving.title | capitalize }}
+                            </p>
+                            <div class="inline-flex items-center text-base font-semibold text-gray-900">
+                                {{ saving.amount }}€
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Vous n'avez pas d'économies</p>
+        {% endif %}
+        </div>
+        <div class="max-w-md divide-y divide-gray-200 flex-1">
+            <h2 class="text-gray-700 uppercase bg-gray-50 text-center font-bold">Objectifs</h2>
+            {% if goals|length > 0 %}
+                <ul>
+                    {% for goal in goals %}
+                        <li class="hover:bg-pink-100 p-4">
+                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                <p class="flex-1 min-w-0 text-gray-900 truncate">
+                                    {{ goal.title | capitalize }}
+                                </p>
+                                <div class="inline-flex items-center text-base font-semibold text-gray-900">
+                                    {{ goal.amount }}€
+                                </div>
+                                <div class="inline-flex items-center text-base text-gray-900">
+                                    {{ goal.deadline|date('d-m-Y') }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Vous n'avez pas d'objectif</p>
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}

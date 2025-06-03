@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saving index{% endblock %}
+
+{% block body %}
+    <h1>Saving index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for saving in savings %}
+            <tr>
+                <td>{{ saving.amount }}</td>
+                <td>{{ saving.id }}</td>
+                <td>{{ saving.title }}</td>
+                <td>{{ saving.createdAt ? saving.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ saving.updatedAt ? saving.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_saving_show', {'id': saving.id}) }}">show</a>
+                    <a href="{{ path('app_saving_edit', {'id': saving.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_saving_new') }}">Create new</a>
+{% endblock %}

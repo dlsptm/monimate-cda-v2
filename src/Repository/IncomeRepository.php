@@ -16,28 +16,20 @@ class IncomeRepository extends ServiceEntityRepository
         parent::__construct($registry, Income::class);
     }
 
-    //    /**
-    //     * @return Income[] Returns an array of Income objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('i.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function fetchIncomeByMonth(string $createdBy, string $month, string $year): array
+    {
+        $startDate = new \DateTime(\sprintf('%d-%02d-01', $year, $month));
+        $endDate = (clone $startDate)->modify('first day of next month');
 
-    //    public function findOneBySomeField($value): ?Income
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $qb = $this->createQueryBuilder('i')
+            ->andWhere('i.createdBy = :createdBy')
+            ->andWhere('i.createdAt >= :startDate')
+            ->andWhere('i.createdAt < :endDate')
+            ->setParameter('createdBy', $createdBy)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->orderBy('i.createdAt', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

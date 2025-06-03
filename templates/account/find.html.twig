@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for accountUser in accountUsers %}
+
+        <a href="{{ path('account_index', { 'slug': accountUser.account.slug }) }}" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">{{ accountUser.account.title }}</h5>
+            <span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">{{ accountUser.admin ? 'Administrateur' : 'Membre' }}</span>
+            <span class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">{{ accountUser.account.shared ? 'Compte partagé' : 'Compte personnel' }}</span>
+
+        </a>
+
+    {% endfor %}
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

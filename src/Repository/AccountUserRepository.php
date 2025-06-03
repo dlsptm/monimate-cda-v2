@@ -16,7 +16,7 @@ class AccountUserRepository extends ServiceEntityRepository
         parent::__construct($registry, AccountUser::class);
     }
 
-    public function fetchPersonnalAccount(string $memberId)
+    public function fetchPersonnalAccount(string $memberId): ?AccountUser
     {
         return $this->createQueryBuilder('au')
             ->join('au.account', 'ac')
@@ -27,10 +27,10 @@ class AccountUserRepository extends ServiceEntityRepository
             ->setParameter('memberId', $memberId)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
 
-    public function findBySlugAndMemberId(string $slug, string $memberId)
+    public function findBySlugAndMemberId(string $slug, string $memberId) : ?AccountUser
     {
         return $this->createQueryBuilder('au')
             ->join('au.account', 'ac')

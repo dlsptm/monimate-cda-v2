@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Entity\Traits\BlamableTrait;
 use App\Entity\Traits\DateTimeImmutableTrait;
 use App\Repository\AccountUserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: AccountUserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -19,9 +21,10 @@ class AccountUser
     private ?Account $account = null;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: Types::STRING)]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?string $id = null;
 
     #[ORM\Column]
     private ?bool $isAdmin = null;
@@ -35,7 +38,7 @@ class AccountUser
         return $this->account;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

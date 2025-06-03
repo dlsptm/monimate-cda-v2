@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saving{% endblock %}
+
+{% block body %}
+    <h1>Saving</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Amount</th>
+                <td>{{ saving.amount }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ saving.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ saving.title }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ saving.createdAt ? saving.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ saving.updatedAt ? saving.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_saving_index') }}">back to list</a>
+
+    <a href="{{ path('app_saving_edit', {'id': saving.id}) }}">edit</a>
+
+    {{ include('saving/_delete_form.html.twig') }}
+{% endblock %}

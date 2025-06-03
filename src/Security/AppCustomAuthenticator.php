@@ -28,9 +28,8 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private readonly AccountUserRepository $accountUserRepository,
-        private readonly Security $security
-    )
-    {
+        private readonly Security $security,
+    ) {
     }
 
     public function authenticate(Request $request): Passport
@@ -55,15 +54,15 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        /**@var User $user*/
-        $user =$this->security->getUser();
-        $accountUser = $this->accountUserRepository->fetchPersonnalAccount($user->getId());
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $accountUser = $this->accountUserRepository->fetchPersonnalAccount((string) $user->getId());
 
         if (!$accountUser) {
-            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+            return new RedirectResponse($this->urlGenerator->generate('account_find'));
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('account_index', ['slug' => $accountUser->getAccount()->getSlug()]));
+        return new RedirectResponse($this->urlGenerator->generate('account_index', ['slug' => $accountUser->getAccount()?->getSlug()]));
     }
 
     protected function getLoginUrl(Request $request): string

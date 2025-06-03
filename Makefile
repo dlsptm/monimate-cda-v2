@@ -6,7 +6,7 @@ phpcs:
 	--allow-risky=yes
 
 phpstan:
-	php vendor/bin/phpstan analyse -c phpstan.dist.neon
+	php vendor/bin/phpstan analyse -c phpstan.dist.neon --memory-limit=1G
 
 
 db-drop:

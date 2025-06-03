@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Saving{% endblock %}
+
+{% block body %}
+    <h1>Edit Saving</h1>
+
+    {{ include('saving/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_saving_index') }}">back to list</a>
+
+    {{ include('saving/_delete_form.html.twig') }}
+{% endblock %}

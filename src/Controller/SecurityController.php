@@ -33,9 +33,10 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, AccountUserRepository $accountUserRepository): Response
     {
         if ($this->getUser()) {
-            /**@var User $user*/
-            $user =$this->getUser();
-            $accountUser = $accountUserRepository->fetchPersonnalAccount($user->getId());
+            /** @var User $user */
+            $user = $this->getUser();
+            $accountUser = $accountUserRepository->fetchPersonnalAccount((string) $user->getId());
+
             return $this->redirectToRoute('account_index', ['slug' => $accountUser->getAccount()->getSlug()]);
         }
 

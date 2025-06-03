@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Saving{% endblock %}
+
+{% block body %}
+    <h1>Create new Saving</h1>
+
+    {{ include('saving/_form.html.twig') }}
+
+    <a href="{{ path('app_saving_index') }}">back to list</a>
+{% endblock %}
