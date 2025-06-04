@@ -54,8 +54,9 @@
                         <td class="px-6 py-4">
                             {{ transaction.amount }}€
                         </td>
-                        <td class="px-6 py-4">
-                            {{ transaction.category.title }}
+                        <td class="px-6 py-4 flex gap-2 items-center">
+                            <img class="w-8 h-8 rounded-full" src="{{ asset('/img/' ~ transaction.category.title|lower ~'.png') }}" alt="{{ transaction.category.title }}" width="10" height="10">
+                            <span>{{ transaction.category.title }}</span>
                         </td>
                         <td class="px-6 py-4">
                             {{ transaction.location }}
